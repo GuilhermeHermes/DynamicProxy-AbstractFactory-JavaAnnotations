@@ -9,7 +9,7 @@ import java.util.List;
 
 public class BancoInterPaymentService implements PaymentService{
 
-
+    @Load
     public List<PaymentInfo> LoadPaymentInfos() {
         List<PaymentInfo> paymentInfos = new ArrayList<>();
         paymentInfos.add(new PaymentInfo("1234567890123456", 100.00));
@@ -33,6 +33,7 @@ public class BancoInterPaymentService implements PaymentService{
         return null;
     }
 
+    @Transaction
     @Override
     public boolean processPayment(PaymentInfo paymentInfo) {
         System.out.println("INTER:Processing credit card payment");
@@ -43,7 +44,7 @@ public class BancoInterPaymentService implements PaymentService{
         return true;
     }
 
-
+    @Transaction
     @Override
     public void refundPayment(PaymentInfo paymentInfo) {
         System.out.println("INTER:Processing credit card payment");

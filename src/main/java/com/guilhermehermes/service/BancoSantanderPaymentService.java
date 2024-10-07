@@ -8,7 +8,7 @@ import java.util.List;
 
 public class BancoSantanderPaymentService implements PaymentService{
 
-
+    @Load
     @Override
     public List<PaymentInfo> LoadPaymentInfos() {
         List<PaymentInfo> paymentInfos = List.of(
@@ -33,6 +33,7 @@ public class BancoSantanderPaymentService implements PaymentService{
         return null;
     }
 
+    @Transaction
     @Override
     public boolean processPayment(PaymentInfo paymentInfo) {
         System.out.println("SANTANDER: Processing credit card payment");
@@ -43,7 +44,7 @@ public class BancoSantanderPaymentService implements PaymentService{
         return true;
     }
 
-
+    @Transaction
     @Override
     public void refundPayment(PaymentInfo paymentInfo) {
         System.out.println("SANTANDER: Processing credit card payment");

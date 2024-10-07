@@ -55,7 +55,7 @@ public class PaymentSystem {
     public void getPaymentInfos( ) {
        List<PaymentInfo> paymentInfos = paymentService.LoadPaymentInfos();
         for (PaymentInfo paymentInfo : paymentInfos) {
-            System.out.printf("Cartão: %s, Valor: %.2f%n", paymentInfo.getCardNumber(), paymentInfo.getAmount());
+            System.out.printf("\nCartão: %s, Valor: %.2f%n\n", paymentInfo.getCardNumber(), paymentInfo.getAmount());
         }
     }
 
