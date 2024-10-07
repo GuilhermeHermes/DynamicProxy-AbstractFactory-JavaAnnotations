@@ -1,16 +1,14 @@
 package com.guilhermehermes.utils;
 
-import com.guilhermehermes.service.BancoInterEmailNotificationService;
-import com.guilhermehermes.service.BancoInterPaymentService;
-import com.guilhermehermes.service.NotificationService;
-import com.guilhermehermes.service.PaymentService;
+import com.guilhermehermes.service.*;
 
 public class BancoInterFactory implements PaymentProcessorFactory{
 
     @Override
     public PaymentService createPaymentService() {
         PaymentService realservice = new BancoInterPaymentService();
-        return (PaymentService) PaymentDynamicProxy.createProxy(realservice);
+        PaymentServiceProxy serviceProxy = new PaymentServiceProxy(realservice);
+        return (PaymentService) PaymentDynamicProxy.createProxy(serviceProxy);
     }
 
     @Override

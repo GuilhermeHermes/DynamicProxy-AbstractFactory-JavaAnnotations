@@ -7,7 +7,8 @@ public class BancoSantanderFactory implements PaymentProcessorFactory {
     @Override
     public PaymentService createPaymentService() {
         PaymentService realservice = new BancoSantanderPaymentService();
-        return (PaymentService) PaymentDynamicProxy.createProxy(realservice);
+        PaymentServiceProxy serviceProxy = new PaymentServiceProxy(realservice);
+        return (PaymentService) PaymentDynamicProxy.createProxy(serviceProxy);
     }
 
     @Override

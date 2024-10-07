@@ -5,6 +5,8 @@ import com.guilhermehermes.service.NotificationService;
 import com.guilhermehermes.service.PaymentService;
 import com.guilhermehermes.utils.PaymentProcessorFactory;
 
+import java.util.List;
+
 public class PaymentSystem {
     private final PaymentService paymentService;
     private final NotificationService notificationService;
@@ -32,4 +34,29 @@ public class PaymentSystem {
             }
         }
     }
+
+    public void refundPaymentWithNotification(PaymentInfo paymentInfo) {
+        try {
+            paymentService.refundPayment(paymentInfo);
+            notificationService.sendNotification("Pagamento de R$" +
+                    paymentInfo.getAmount() + " estornado com sucesso!");
+        } catch (Exception e) {
+            System.out.println("Erro durante o estorno: " + e.getMessage());
+            try {
+                notificationService.sendNotification("Falha no estorno do pagamento: " +
+                        e.getMessage());
+            } catch (Exception notifError) {
+                System.out.println("Não foi possível enviar notificação de erro: " +
+                        notifError.getMessage());
+            }
+        }
+    }
+
+    public void getPaymentInfos( ) {
+       List<PaymentInfo> paymentInfos = paymentService.LoadPaymentInfos();
+        for (PaymentInfo paymentInfo : paymentInfos) {
+            System.out.printf("Cartão: %s, Valor: %.2f%n", paymentInfo.getCardNumber(), paymentInfo.getAmount());
+        }
+    }
+
 }

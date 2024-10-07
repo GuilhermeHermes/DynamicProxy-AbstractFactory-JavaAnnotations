@@ -18,6 +18,8 @@ public class Main {
             System.out.println("\n=== Processando com " + factory.getClass().getSimpleName() + " ===");
             PaymentSystem paymentSystem = new PaymentSystem(factory);
             paymentSystem.processPaymentWithNotification(payment);
+            paymentSystem.refundPaymentWithNotification(payment);
+            paymentSystem.getPaymentInfos();
         }
 
     }

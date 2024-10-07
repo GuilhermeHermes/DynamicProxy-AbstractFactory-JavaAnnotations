@@ -1,5 +1,6 @@
 package com.guilhermehermes.utils;
 
+import com.guilhermehermes.annotations.Load;
 import com.guilhermehermes.annotations.Transaction;
 
 import java.lang.reflect.InvocationHandler;
@@ -23,6 +24,15 @@ public class BancoDynamicProxyHandler implements InvocationHandler {
             System.out.printf("%s finalizado com %s\n", method.getName(), result);
             return result;
         }
+
+        if(targetMethod.isAnnotationPresent(Load.class)){
+            System.out.printf("%s Carregando dados...\n", method.getName());
+            Object result = method.invoke(target, args);
+            System.out.printf("%s terminou o carregamento de dados!", method.getName());
+            return result;
+        }
+
+
         return method.invoke(target, args);
     }
 }
