@@ -12,7 +12,6 @@ public class PaymentServiceProxy implements PaymentService {
 
     private PaymentService service;
     private List<PaymentInfo> paymentInfoListCache;
-    boolean needReset = false;
 
 
     public PaymentServiceProxy(PaymentService paymentService){
@@ -28,17 +27,6 @@ public class PaymentServiceProxy implements PaymentService {
             throw new RuntimeException(e);
         }
 
-        if (method.isAnnotationPresent(Transaction.class)) {
-            System.out.println("Iniciando transação para LoadPaymentInfos");
-            try {
-                List<PaymentInfo> result = service.LoadPaymentInfos();
-                System.out.println("Finalizando transação para LoadPaymentInfos");
-                return result;
-            } catch (Exception e) {
-                System.out.println("Erro na transação de LoadPaymentInfos: " + e.getMessage());
-                throw e;
-            }
-        }
 
         // Verifica se o método tem a annotation Load
         if (method.isAnnotationPresent(Load.class)) {
@@ -59,11 +47,49 @@ public class PaymentServiceProxy implements PaymentService {
 
     @Override
     public boolean processPayment(PaymentInfo paymentInfo) {
+        Method method;
+        try {
+            method = service.getClass().getMethod("LoadPaymentInfos");
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        }
+
+
+        if (method.isAnnotationPresent(Transaction.class)) {
+            System.out.println("Iniciando transação para LoadPaymentInfos");
+            try {
+                boolean result = service.processPayment(paymentInfo);
+                System.out.println("Finalizando transação para LoadPaymentInfos");
+                return result;
+            } catch (Exception e) {
+                System.out.println("Erro na transação de LoadPaymentInfos: " + e.getMessage());
+                throw e;
+            }
+        }
+
         return service.processPayment(paymentInfo);
     }
 
     @Override
     public void refundPayment(PaymentInfo paymentInfo) {
-        service.refundPayment(paymentInfo);
+        Method method;
+        try {
+            method = service.getClass().getMethod("LoadPaymentInfos");
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        }
+
+
+        if (method.isAnnotationPresent(Transaction.class)) {
+            System.out.println("Iniciando transação para LoadPaymentInfos");
+            try {
+                service.refundPayment(paymentInfo);
+                System.out.println("Finalizando transação para LoadPaymentInfos");
+            } catch (Exception e) {
+                System.out.println("Erro na transação de LoadPaymentInfos: " + e.getMessage());
+                throw e;
+            }
+        }
+
     }
 }
